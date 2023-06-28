@@ -1,0 +1,19 @@
+ndling pascal tiangle interview question
+
+Task 
+0. Pascal's Triangle
+Create a function def pascal_triangle(n): that returns a list of lists of integers representing the Pascal’s triangle of n:
+
+Returns an empty list if n <= 0
+You can assume n will be always an integer
+we first check if n is less than or equal to 0. If so, we return an empty list since Pascal's triangle cannot be generated for non-positive values of n.
+
+If n is greater than 0, we initialize triangle as a list containing the first row of Pascal's triangle, which is [1].
+
+We then iterate from 1 to n-1 to generate each subsequent row of the triangle. Inside this loop, we initialize an empty list row and obtain the previous row from triangle.
+
+Within the nested loop, we calculate the values of each element in the row by summing the corresponding elements from the previous row.
+
+After completing the nested loop, we add 1 to the end of the row and append the row to triangle.
+
+Finally, we return the complete triangle representing Pascal's triangle.
