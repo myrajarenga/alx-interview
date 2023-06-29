@@ -1,5 +1,10 @@
 #!/usr/bin/python3
+""" function to create pascal triangle
+"""
+
+
 def pascal_triangle(n):
+    """ creating the triangle"""
     if n <= 0:
         return []
 
