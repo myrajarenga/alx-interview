@@ -1,20 +1,34 @@
 #!/usr/bin/env python3
 
+"""
+lock-boxes
+"""
+def unlocker(box, openboxes, boxes):
+    """Recursive function to unlock the boxes"""
+    if len(boxes) == len(openboxes):
+        # If all boxes are already open, return the set of open boxes
+        return openboxes
+    for value in box:
+        if value >= len(boxes):
+            continue
+        if value not in openboxes:
+            # If the box is not already open, add it to the set of open boxes
+            openboxes.add(value)
+            # Recursively call the unlocker function for the next box
+            unlocker(boxes[value], openboxes, boxes)
+    return openboxes
+
 
 def canUnlockAll(boxes):
-    """ function to unlock boxes"""
-    num_boxes = len(boxes)
-    unlocked_boxes = [False] * num_boxes
-    unlocked_boxes[0] = True  # The first box is unlocked
-
-    # Iterate through the keys and unlock the corresponding boxes
-    keys_stack = boxes[0]  # Start with the keys in the first box
-    while keys_stack:
-        current_key = keys_stack.pop()  # Take a key from the stack
-
-        # Check if the key is valid and can unlock a box
-        if current_key < num_boxes and not unlocked_boxes[current_key]:
-            unlocked_boxes[current_key] = True  # Unlock the box
-            keys_stack.extend(boxes[current_key])  # Add the keys
-
-    return all(unlocked_boxes)  # Check if all boxes are unlocked
+    # Main function to check if all boxes can be unlocked
+    openboxes = {0}  # Start with the first box open
+    if len(boxes) == 1:
+        # If there is only one box, it is already unlocked
+        return True
+    unlocked = unlocker(boxes[0], openboxes, boxes)
+    if len(unlocked) == len(boxes):
+        # If the number of open boxes is equal to the total number of boxes, return True
+        return True
+    else:
+        # Otherwise, return False
+        return False
