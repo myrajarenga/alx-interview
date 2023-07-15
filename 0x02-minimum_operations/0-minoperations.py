@@ -6,20 +6,14 @@ minimum operations
 
 def minOperations(n):
     """ return number of minimal operations"""
-    if n < 2:
+    if n <= 1:
         return 0
 
-    operations = 0
-    current = 1
+    i = 2
 
-    while current != n:
-        if n % current == 0:
-            operations += 1
-            current *= 2
+    while i <= int(n ** 0.5):
+        if n % i == 0:
+            return i + minOperations(n // i)
+        i += 1
 
-            if current == n:
-                break
-        operations += 1
-        current += current
-
-    return operations
+    return n
