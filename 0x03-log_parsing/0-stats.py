@@ -3,46 +3,50 @@
 script that reads stdin by line
 """
 
+
 import sys
 
 
-def compute_metrics():
-    code = {}
-    file_size = 0
-    vals_total = 0
+"""store the count of all status codes in a dictionary"""
+status_codes_dict = {'200': 0, '301': 0, '400': 0, '401': 0, '403': 0,
+                     '404': 0, '405': 0, '500': 0}
 
-    try:
-        print_status_codes(code, file_size)
+total_size = 0
+count = 0
+"""Print initial statistics before processing the input"""
+print('File size: {}'.format(total_size))
+for key, value in sorted(status_codes_dict.items()):
+    if value != 0:
+        print('{}: {}'.format(key, value))
 
-        for line in sys.stdin:
-            line = line.split()
-            file_size += int(line[-1])
-            status = line[-2]
-            vals = list(code.values())
-            vals_total = sum(vals)
+try:
+    for line in sys.stdin:
+        line_list = line.split(" ")
 
-            if status not in code:
-                code[status] = 1
-            else:
-                code[status] += 1
+        if len(line_list) > 4:
+            status_code = line_list[-2]
+            file_size = int(line_list[-1])
 
-            vals_total += 1
+            if status_code in status_codes_dict.keys():
+                status_codes_dict[status_code] += 1
 
-            if vals_total % 10 == 0:
-                print_status_codes(code, file_size)
+            total_size += file_size
 
-    except KeyboardInterrupt:
-        print("\nProgram interrupted. Current statistics:")
-        print_status_codes(code, file_size)
-        sys.exit(0)
+            count += 1
 
+        if count == 10:
+            count = 0
+            print('File size: {}'.format(total_size))
 
-def print_status_codes(code, file_size):
-    print("File size:", file_size)
-    for status, count in sorted(code.items()):
-        print(f"{status}: {count}")
-    print()
+            for key, value in sorted(status_codes_dict.items()):
+                if value != 0:
+                    print('{}: {}'.format(key, value))
 
+except Exception as err:
+    pass
 
-if __name__ == "__main__":
-    compute_metrics()
+finally:
+    print('File size: {}'.format(total_size))
+    for key, value in sorted(status_codes_dict.items()):
+        if value != 0:
+            print('{}: {}'.format(key, value))
