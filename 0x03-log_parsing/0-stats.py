@@ -3,46 +3,54 @@
 script that reads stdin by line
 """
 
-
 import sys
 import re
 
 
-def compute_metrics_recursive(total_size=0, status_code_count=None, line_count=1):
-    """function to compute metix using recursion"""
-    if status_code_count is None:
-        status_code_count = {}
+def compute_metrics_recursive(file_sizes=0, status_counts=None, line_count=0):
+    """function to compute metrix using recursion"""
+    if status_counts is None:
+        status_counts = {}
 
     try:
-        line = next(sys.stdin)
-    except StopIteration:
-        print("\nEnd of input. Final statistics:")
-        print_statistics(total_size, status_code_count)
-        return
+        line = input().strip()  # Read a line from the standard input
 
-    match = re.match(
-        r'(\d+\.\d+\.\d+\.\d+) - \[(.*?)\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)',
-        line
-    )
+        if not line:
+            print_statistics(file_sizes, status_counts)
+            return
 
-    if match:
-        ip_address, date, status_code, file_size = match.groups()
-        total_size += int(file_size)
+        # Use regular expression to match the input format
+        match = re.match(
+            r'(\d+\.\d+\.\d+\.\d+) - \[(.*?)\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)',
+            line
+        )
 
-        if status_code.isdigit():
-            status_code_count[int(status_code)] = status_code_count.get(int(status_code), 0) + 1
+        if match:
+            _, _, status_code, file_size = match.groups()
+            file_sizes += int(file_size)
 
-    if line_count % 10 == 0:
-        print_statistics(total_size, status_code_count)
+            if status_code.isdigit():
+                status_counts[int(status_code)]\
+                        = status_counts.get(int(status_code), 0) + 1
 
-    compute_metrics_recursive(total_size, status_code_count, line_count + 1)
+        line_count += 1
+
+        if line_count % 10 == 0:
+            print_statistics(file_sizes, status_counts)
+
+        compute_metrics_recursive(file_sizes, status_counts, line_count)
+
+    except KeyboardInterrupt:
+        """Program interrupted. Current statistics"""
+        print_statistics(file_sizes, status_counts)
+        sys.exit(0)
 
 
-def print_statistics(total_size, status_code_count):
-    """print statistics"""
-    print("Total file size:", total_size)
-    for status_code in sorted(status_code_count.keys()):
-        print(f"{status_code}: {status_code_count[status_code]}")
+def print_statistics(file_sizes, status_counts):
+    """total ststistics"""
+    print("Total file size:", file_sizes)
+    for status_code in sorted(status_counts.keys()):
+        print(f"{status_code}: {status_counts[status_code]}")
     print()
 
 
