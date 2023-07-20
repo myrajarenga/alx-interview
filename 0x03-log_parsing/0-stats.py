@@ -4,7 +4,6 @@ script that reads stdin by line
 """
 
 import sys
-import re
 
 
 def compute_metrics():
@@ -14,14 +13,27 @@ def compute_metrics():
 
     try:
         for line in sys.stdin:
-            match = re.match(
-                r'(\d+\.\d+\.\d+\.\d+) - \[(.*?)\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)',
-                line
-            )
+            line = line.strip()
 
-            if match:
-                _, _, status_code, size = match.groups()
-                file_size += int(size)
+            if not line:
+                """
+                If the line is empty, it means we 
+                have reached the end of input
+                """
+                print("\nEnd of input. Final statistics:")
+                print_statistics(code, file_size)
+                return
+
+            """Split the line using double quotes as the separator"""
+            parts = line.split('"')
+
+            if len(parts) >= 3:
+                """Extract the file size from the last part"""
+                size = int(parts[-1].split()[-1])
+                file_size += size
+
+                """Extract the status code from the middle part"""
+                status_code = parts[1].split()[-2]
 
                 code[status_code] = code.get(status_code, 0) + 1
                 line_count += 1
