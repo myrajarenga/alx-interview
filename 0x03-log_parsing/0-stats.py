@@ -7,49 +7,38 @@ import sys
 import re
 
 
-def compute_metrics_recursive(file_sizes=0, status_counts=None, line_count=0):
-    """function that computes metix using recursion"""
-    if status_counts is None:
-        status_counts = {}
+def compute_metrics():
+    code = {}
+    file_size = 0
+    line_count = 0
 
     try:
         for line in sys.stdin:
-            line = line.strip()
-
-            if not line:
-                print_statistics(file_sizes, status_counts)
-                return
-
             match = re.match(
                 r'(\d+\.\d+\.\d+\.\d+) - \[(.*?)\] "GET /projects/260 HTTP/1.1" (\d{3}) (\d+)',
                 line
             )
 
             if match:
-                _, _, status_code, file_size = match.groups()
-                file_sizes += int(file_size)
+                _, _, status_code, size = match.groups()
+                file_size += int(size)
 
-                if status_code.isdigit():
-                    status_counts[int(status_code)]\
-                            = status_counts.get(int(status_code), 0) + 1
+                code[status_code] = code.get(status_code, 0) + 1
+                line_count += 1
 
-            line_count += 1
-
-            if line_count % 10 == 0:
-                print_statistics(file_sizes, status_counts)
+                if line_count % 10 == 0:
+                    print_statistics(code, file_size)
 
     except KeyboardInterrupt:
-        print_statistics(file_sizes, status_counts)
-        sys.exit(0)
+        print_statistics(code, file_size)
 
 
-def print_statistics(file_sizes, status_counts):
-    """prin statistics"""
-    print("file size", file_sizes)
-    for status_code in sorted(status_counts.keys()):
-        print(f"{status_code}: {status_counts[status_code]}")
+def print_statistics(code, file_size):
+    print("file size:", file_size)
+    for status_code, count in sorted(code.items()):
+        print(f"{status_code}: {count}")
     print()
 
 
 if __name__ == "__main__":
-    compute_metrics_recursive()
+    compute_metrics()
