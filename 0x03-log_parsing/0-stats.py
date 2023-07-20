@@ -16,11 +16,7 @@ def compute_metrics():
             line = line.strip()
 
             if not line:
-                """
-                If the line is empty, it means we 
-                have reached the end of input
-                """
-                print("\nEnd of input. Final statistics:")
+                """If the line is empty"""
                 print_statistics(code, file_size)
                 return
 
