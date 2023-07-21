@@ -13,11 +13,6 @@ status_codes_dict = {'200': 0, '301': 0, '400': 0, '401': 0, '403': 0,
 
 total_size = 0
 count = 0
-"""Print initial statistics before processing the input"""
-print('File size: {}'.format(total_size))
-for key, value in sorted(status_codes_dict.items()):
-    if value != 0:
-        print('{}: {}'.format(key, value))
 
 try:
     for line in sys.stdin:
