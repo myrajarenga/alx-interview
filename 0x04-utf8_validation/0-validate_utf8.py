@@ -11,8 +11,8 @@ def validUTF8(data):
     for byte in data:
         if num_of_bytes_to_check == 0:
             if byte >> 7 == 0b0:
-               """singkr byte character (ASCII)"""
-               continue
+                """singkr byte character (ASCII)"""
+                continue
             elif byte >> 5 == 0b110:
                 num_of_bytes_to_check = 1  # 2-byte character
             elif byte >> 4 == 0b1110:
@@ -21,7 +21,6 @@ def validUTF8(data):
                 num_to_bytes_to_check = 3  # 4-byte character
             else:
                 return False
-
 
         else:
             if byte >> 6 != 0b10:
