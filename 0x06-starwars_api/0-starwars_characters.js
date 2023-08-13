@@ -10,7 +10,7 @@ const movieId = process.argv[2];
 const movieEndpoint = 'https://swapi-api.alx-tools.com/api/films/' + movieId;
 
 // Function to send requests to retrieve character information
-function fetchCharacters(characterList, index) {
+function fetchCharacters (characterList, index) {
   // If all characters are fetched, stop
   if (characterList.length === index) {
     return;
