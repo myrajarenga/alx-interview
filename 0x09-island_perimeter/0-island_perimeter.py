@@ -1,7 +1,6 @@
 #!/usr/bin/python3
-
 """
-Island Perimeter
+island perimeter
 """
 
 
@@ -9,31 +8,38 @@ def island_perimeter(grid):
     if not grid:
         return 0
 
-    def dfs(x, y):
-        # Base cases for the DFS recursion
-        if x < 0 or x >= len(grid) or y < 0 or y >= \
-                len(grid[0]) or grid[x][y] == 0:
-            return 1
-        # Count the perimeter if we're at the boundary or next to water
+    rows = len(grid)
+    cols = len(grid[0])
+    perimeter = 0
 
-        if grid[x][y] == -1:
-            return 0  # Skip visited cells
+    for row in range(rows):
+        for col in range(cols):
+            if grid[row][col] == 1:
+                # Check the four neighboring cells
+                up = row - 1
+                down = row + 1
+                left = col - 1
+                right = col + 1
 
-        grid[x][y] = -1  # Mark the cell as visited
-        perimeter = 0
+                # Initialize edge count
+                edges = 0
 
-        # Explore adjacent cells
-        perimeter += dfs(x - 1, y)  # Up
-        perimeter += dfs(x + 1, y)  # Down
-        perimeter += dfs(x, y - 1)  # Left
-        perimeter += dfs(x, y + 1)  # Right
+                # Check up
+                if up < 0 or grid[up][col] == 0:
+                    edges += 1
 
-        return perimeter
+                # Check down
+                if down >= rows or grid[down][col] == 0:
+                    edges += 1
 
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if grid[i][j] == 1:
-                # Start DFS from the first land cell you encounter
-                return dfs(i, j)
+                # Check left
+                if left < 0 or grid[row][left] == 0:
+                    edges += 1
 
-    return 0  # If there's no island in the grid
+                # Check right
+                if right >= cols or grid[row][right] == 0:
+                    edges += 1
+
+                perimeter += edges
+
+    return perimeter
