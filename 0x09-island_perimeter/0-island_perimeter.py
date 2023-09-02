@@ -5,6 +5,20 @@ island perimeter
 
 
 def island_perimeter(grid):
+    """
+    Computes the perimeter of an island with no lakes.
+
+    Args:
+        grid (list of list of int): 1 = land and 0 represents water.
+
+    Returns:
+        int: The perimeter of the island.
+
+    Note:
+        - The grid is completely surrounded by water.
+        - There is only one island (or nothing).
+        - The island doesn’t have “lakes” or water.
+    """
     if not grid:
         return 0
 
@@ -15,9 +29,12 @@ def island_perimeter(grid):
     for row in range(rows):
         for col in range(cols):
             if grid[row][col] == 1:
-                perimeter += 4  # Assuming all sides are land
+                perimeter += 4  # Assume all sides are land
 
-                # Check each adjacent cell and subtract 1 for each neighboring land cell
+                """
+                Check each adjacent cell and subtract
+                1 for each neighboring land cell
+                """
                 if row > 0 and grid[row - 1][col] == 1:
                     perimeter -= 1
                 if row < rows - 1 and grid[row + 1][col] == 1:
