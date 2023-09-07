@@ -6,8 +6,10 @@ prime numbers
 """
 
 
-def generate_primes(n):
-    """function to generaat eprime numbers"""
+def sieve_of_eratosthenes(n):
+    """The function sieve_of_eratosthenes(n) implements the Sieve of Eratosthenes algorithm, 
+    which is an ancient and efficient method for finding all prime numbers up to a given limit n.
+    """
     primes = [True] * (n + 1)
     primes[0] = primes[1] = False
     for i in range(2, int(n**0.5) + 1):
@@ -26,13 +28,14 @@ def isWinner(x, nums):
     Returns:
         str or None: Name of the player with the most wins. Returns None if the winner cannot be determined.
     """
+
     if x < 1 or not nums:
         return None
 
     marias_wins, bens_wins = 0, 0
 
     for _, n in zip(range(x), nums):
-        primes = generate_primes(n)
+        primes = sieve_of_eratosthenes(n)
         primes_count = sum(primes[2:n+1])
         bens_wins += primes_count % 2 == 0
         marias_wins += primes_count % 2 == 1
