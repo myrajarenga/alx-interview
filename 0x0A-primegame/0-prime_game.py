@@ -16,51 +16,30 @@ def isWinner(x, nums):
 
     Returns:
         str or None: Name of the player with the most wins. Returns None if the winner cannot be determined.
-
-    Raises:
-        None.
-
-    Example:
-
-        >>> x = 3
-        >>> nums = [4, 5, 1]
-        >>> isWinner(x, nums)
-        'Ben'
     """
 
-    def is_prime(num):
-        """Check if a number is prime."""
-        if num < 2:
-            return False
-        for i in range(2, int(num**0.5) + 1):
-            if num % i == 0:
-                return False
-        return True
+    if x < 1 or not nums:
+        return None
 
-    def get_primes(n):
-        """Return a list of prime numbers up to n."""
-        primes = []
-        for i in range(2, n + 1):
-            if is_prime(i):
-                primes.append(i)
+    marias_wins, bens_wins = 0, 0
+
+    def generate_primes(n):
+        primes = [True for _ in range(1, n + 1, 1)]
+        primes[0] = False
+        for i, is_prime in enumerate(primes, 1):
+            if i == 1 or not is_prime:
+                continue
+            for j in range(i + i, n + 1, i):
+                primes[j - 1] = False
         return primes
 
-    def play_round(n):
-        """Simulate a round of the game and return the winner."""
-        primes = get_primes(n)
-        if len(primes) % 2 == 0:
-            return "Ben"
-        else:
-            return "Maria"
+    for _, n in zip(range(x), nums):
+        primes = generate_primes(n)
+        primes_count = len(list(filter(lambda x: x, primes[0: n])))
+        bens_wins += primes_count % 2 == 0
+        marias_wins += primes_count % 2 == 1
 
-    round_winners = [play_round(n) for n in nums]
-
-    maria_wins = round_winners.count("Maria")
-    ben_wins = round_winners.count("Ben")
-
-    if maria_wins > ben_wins:
-        return "Maria"
-    elif ben_wins > maria_wins:
-        return "Ben"
-    else:
+    if marias_wins == bens_wins:
         return None
+
+    return 'Maria' if marias_wins > bens_wins else 'Ben'
