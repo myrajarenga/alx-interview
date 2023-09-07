@@ -1,21 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 """
 function to calculate winner of game of 
 prime numbers
 """
 
-
-def sieve_of_eratosthenes(n):
-    """The function sieve_of_eratosthenes(n) implements the Sieve of Eratosthenes algorithm, 
-    which is an ancient and efficient method for finding all prime numbers up to a given limit n.
-    """
-    primes = [True] * (n + 1)
-    primes[0] = primes[1] = False
-    for i in range(2, int(n**0.5) + 1):
-        if primes[i]:
-            primes[i*i : n+1 : i] = [False] * len(primes[i*i : n+1 : i])
-    return primes
 
 def isWinner(x, nums):
     """
@@ -27,20 +16,52 @@ def isWinner(x, nums):
 
     Returns:
         str or None: Name of the player with the most wins. Returns None if the winner cannot be determined.
+
+    Raises:
+        None.
+
+    Example:
+
+        >>> x = 3
+        >>> nums = [4, 5, 1]
+        >>> isWinner(x, nums)
+        'Ben'
     """
 
-    if x < 1 or not nums:
+    def is_prime(num):
+        """Check if a number is prime."""
+        if num < 2:
+            return False
+        for i in range(2, int(num**0.5) + 1):
+            if num % i == 0:
+                return False
+        return True
+
+    def get_primes(n):
+        """Return a list of prime numbers up to n."""
+        primes = []
+        for i in range(2, n + 1):
+            if is_prime(i):
+                primes.append(i)
+        return primes
+
+    def play_round(n):
+        """Simulate a round of the game and return the winner."""
+        primes = get_primes(n)
+        if len(primes) % 2 == 0:
+            return "Ben"
+        else:
+            return "Maria"
+
+    round_winners = [play_round(n) for n in nums]
+
+    maria_wins = round_winners.count("Maria")
+    ben_wins = round_winners.count("Ben")
+
+    if maria_wins > ben_wins:
+        return "Maria"
+    elif ben_wins > maria_wins:
+        return "Ben"
+    else:
         return None
 
-    marias_wins, bens_wins = 0, 0
-
-    for _, n in zip(range(x), nums):
-        primes = sieve_of_eratosthenes(n)
-        primes_count = sum(primes[2:n+1])
-        bens_wins += primes_count % 2 == 0
-        marias_wins += primes_count % 2 == 1
-
-    if marias_wins == bens_wins:
-        return None
-
-    return 'Maria' if marias_wins > bens_wins else 'Ben'
