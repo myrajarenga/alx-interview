@@ -1,21 +1,24 @@
 #!/usr/bin/python3
 
 """
-function to calculate winner of game of 
+function to calculate winner of game of
 prime numbers
 """
 
 
 def isWinner(x, nums):
     """
-    Determines the winner of multiple rounds of a game based on prime number selection.
+    Determines the winner of multiple rounds of a game
+    based on prime number selection.
 
     Args:
         x (int): Number of rounds.
-        nums (list): List of integers representing the upper limits for each round.
+        nums (list): List of integers representing
+        the upper limits for each round.
 
     Returns:
-        str or None: Name of the player with the most wins. Returns None if the winner cannot be determined.
+        str or None: Name of the player with the most wins.
+        Returns None if the winner cannot be determined.
 
     Raises:
         None.
@@ -64,4 +67,3 @@ def isWinner(x, nums):
         return "Ben"
     else:
         return None
-
